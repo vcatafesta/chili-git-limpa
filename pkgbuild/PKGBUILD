@@ -43,6 +43,7 @@ license=('MIT')
 depends=('git' 'git-filter-repo')
 sha256sums=('SKIP')
 
+
 package() {
   install -d "$pkgdir/usr/local/bin"
   install -m755 "$srcdir/chili-git-limpa-100+" "$pkgdir/usr/local/bin/chili-git-limpa-100+"
