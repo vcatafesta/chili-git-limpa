@@ -31,19 +31,56 @@
 ##############################################################################
 # Maintainer: Vilmar Catafesta <vcatafesta@gmail.com>
 
-pkgname=chili-git-limpa
-pkgdesc="Remove arquivos maiores que 100MB do histórico Git com estilo"
+pkgname=chili-pkgname
+pkgdesc="Package template for Chililinux"
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
 arch=('any')
+license=('MIT')
 #url="ssh://git@github.com/chililinux/${pkgname}"
 url="https://github.com/chililinux/${pkgname}"
 source=("git+${url}.git")
-license=('MIT')
-depends=('git' 'git-filter-repo')
-sha256sums=('SKIP')
+md5sums=('SKIP')
+depends=()
+optdepends=()
+groups_list=()
+post_install_pkgs=(
+  bash
+)
+
+# Automatically detect and use the correct install file
+if [ -e "${pkgname}.install" ]; then
+	install=${pkgname}.install
+elif [ -e "pkgbuild.install" ]; then
+	install=pkgbuild.install
+fi
 
 package() {
-  install -d "$pkgdir/usr/local/bin"
-  install -m755 "$srcdir/chili-git-limpa-100+" "$pkgdir/usr/local/bin/chili-git-limpa-100+"
+	cd "${srcdir}/${pkgname}"
+
+  # Instala todos os arquivos em /usr/share/${pkgname} no momento da criação do pacote
+  install -dm755 "${pkgdir}/usr/share/${pkgname}"
+  # Lista de pacotes instalados automaticamente via post_install
+  # (não confundir com optdepends do PKGBUILD)
+  if ((${#post_install_pkgs[@]})); then
+    printf "%s\n" "${post_install_pkgs[@]}" >"${pkgdir}/usr/share/${pkgname}/optdepends"
+  fi
+
+	# Copiar a estrutura de /etc, /usr e /opt para /usr/share/${pkgname}
+	local dirs=("usr" "etc" "opt")
+	for dir in "${dirs[@]}"; do
+		if [ -d "${srcdir}/${pkgname}/${dir}" ]; then
+			cp -a "${srcdir}/${pkgname}/${dir}" "${pkgdir}/usr/share/${pkgname}/"
+		fi
+	done
+
+	# Install license file if present
+	if [ -f "LICENSE" ]; then
+		install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+	fi
+
+	# Install documentation if present
+	if [ -f "README.md" ]; then
+		install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+	fi
 }
