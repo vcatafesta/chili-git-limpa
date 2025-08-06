@@ -46,5 +46,5 @@ sha256sums=('SKIP')
 
 package() {
   install -d "$pkgdir/usr/local/bin"
-  install -m755 "$srcdir/chili-git-limpa-100+" "$pkgdir/usr/local/bin/chili-git-limpa-100+"
+  install -m755 "$srcdir/usr/local/bin/chili-git-limpa-100+" "$pkgdir/usr/local/bin/chili-git-limpa-100+"
 }
