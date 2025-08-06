@@ -1,0 +1,16 @@
+# Maintainer: Vilmar Catafesta <vcatafesta@gmail.com>
+pkgname=chili-git-limpa
+pkgver=1.0
+pkgrel=1
+pkgdesc="Remove arquivos maiores que 100MB do histórico Git com estilo"
+arch=('any')
+url="https://github.com/vcatafesta"
+license=('MIT')
+depends=('git' 'git-filter-repo')
+source=('chili-git-limpa')
+sha256sums=('SKIP')
+
+package() {
+  install -d "$pkgdir/usr/local/bin"
+  install -m755 "$srcdir/chili-git-limpa" "$pkgdir/usr/local/bin/chili-git-limpa"
+}
